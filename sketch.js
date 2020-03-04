@@ -1,27 +1,49 @@
 let ants = [];
 
-let windowWidth = 1000;
-let windowHeight = 800;
+let windowWidth = 862;
+let windowHeight = 595;
+
+let iterationsPerStep = 100;
+
+let angleDiff = 70;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   angleMode(DEGREES);
   ants = [
-    new Ant(createVector(random(200, 800), random(200, 600)), random(180)),
-    new Ant(createVector(random(200, 800), random(200, 600)), random(180)),
-    new Ant(createVector(random(200, 800), random(200, 600)), random(180))
+    new Ant(
+      createVector(
+        random(windowWidth * (1 / 6), windowWidth * (5 / 6)),
+        random(windowHeight * (1 / 6), windowHeight * (5 / 6))
+      ),
+      random(180)
+    ),
+    new Ant(
+      createVector(
+        random(windowWidth * (1 / 6), windowWidth * (5 / 6)),
+        random(windowHeight * (1 / 6), windowHeight * (5 / 6))
+      ),
+      random(180)
+    ),
+    new Ant(
+      createVector(
+        random(windowWidth * (1 / 6), windowWidth * (5 / 6)),
+        random(windowHeight * (1 / 6), windowHeight * (5 / 6))
+      ),
+      random(180)
+    )
   ];
+
+  ants.forEach(a => {
+    a.run();
+  });
 }
 
-function draw() {
-  for (let i = 0; i < 30; i++) {
-    ants.forEach(ant => {
-      ant.update();
-    });
+function draw() {}
 
-    ants.forEach(ant => {
-      ant.draw();
-    });
+function keyPressed() {
+  if (keyCode === 80) {
+    save("ants.png");
   }
 }
 
@@ -33,6 +55,13 @@ class Ant {
     this.velocity = 2;
 
     this.stopped = false;
+  }
+
+  run() {
+    while (!this.stopped) {
+      this.update();
+      this.draw();
+    }
   }
 
   update() {
@@ -49,7 +78,6 @@ class Ant {
   getNextPosition() {
     let x = this.velocity * sin(this.direction);
     let y = this.velocity * cos(this.direction);
-    let angleDiff = 90;
     this.direction += random(-angleDiff, angleDiff);
 
     return createVector(this.oldPosition.x + x, this.oldPosition.y + y);
